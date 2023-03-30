@@ -1,0 +1,20 @@
+.keyboard-container {
+    position: fixed;
+    bottom: 0px;
+    right: 50%;
+    transform: translate(50%);
+}
+
+.start-btn {
+    position: fixed;
+    left: 20%;
+    top: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.loading-container {
+    position: fixed;
+    right: 15%;
+    top: 50%;
+}
