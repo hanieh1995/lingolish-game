@@ -5,9 +5,9 @@ export function StartGame(props) {
         <div className="main">
             <div>Select Mode</div>
             <div className="modes">
-                <div className="easy" onClick={modeHandle}>Easy</div>
-                <div className="normal" onClick={modeHandle}>Normal</div>
-                <div className="hard" onClick={modeHandle}>Hard</div>
+                <div className="easy" onClick={modeHandle}>Noob</div>
+                <div className="normal" onClick={modeHandle}>Clever</div>
+                <div className="hard" onClick={modeHandle}>Professor</div>
             </div>
         </div>
     )

@@ -2,7 +2,15 @@
     position: fixed;
     bottom: 0px;
     right: 50%;
+    width: 100%;
     transform: translate(50%);
+}
+
+.player-insert-container {
+    position: fixed;
+    bottom: 32%;
+    left: 50%;
+    transform: translate(-50%);
 }
 
 .start-btn {
@@ -15,6 +23,43 @@
 
 .loading-container {
     position: fixed;
+    right: 20%;
+    top: 65%;
+}
+
+.player-turn-indicator,
+.bot-turn-indicator {
+    position: fixed;
+    font-size: 35px;
+    font-weight: bold;
+    border-radius: 15px;
+    padding: 10px 10px 15px 10px;
+    animation: transfomText 1s infinite;
+}
+
+.player-turn-indicator {
+    left: 15%;
+    color: #2d3436;
+    border: 3px solid #2d3436;
+
+}
+
+.bot-turn-indicator {
     right: 15%;
-    top: 50%;
+    color: #fdcb6e;
+    border: 3px solid #fdcb6e;
+}
+
+@keyframes transfomText {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(15px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
 }

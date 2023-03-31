@@ -4,8 +4,8 @@ import { GuessList } from './components/guessLists/guessList';
 import { VirtualKeyboard } from './components/virtualKeyboard/virtualKeyboard';
 import { StartGame } from './components/startGame/startGame';
 import { PlayerInsertion } from './components/playerInsertion/playerInsertion';
-import './App.css'
 import { Loading } from './components/loading/loading';
+import './App.css'
 
 function App() {
   const [currentPass, setCurrentPass] = useState(
@@ -13,22 +13,21 @@ function App() {
   );
   const [allGuesses, setAllGuesses] = useState([]);
   const [passWords, setPassWords] = useState(PASSWORDS);
-  const [robotGuess, setRobotGuess] = useState("");
+  const [robotGuess, setRobotGuess] = useState([""]);
   const [playerGuess, setPlayerGuess] = useState([]);
   const [correctBotGuess, setCorrectBotGuess] = useState(["", "", "", "", ""]);
   const [correctPlayerGuess, setCorrectPlayerGuess] = useState(["", "", "", "", ""]);
   const [includePlayerGuess, setIncludePlayerGuess] = useState(["", "", "", "", ""]);
-
   const [turn, setTurn] = useState(["Bot"]);
-  const [mode, setMode] = useState("");
+  const [mode, setMode] = useState([]);
 
   const currentPassArray = Array.from(currentPass);
-  const robotGuessArray = Array.from(robotGuess);
   let passwords;
-
+  let robotGuessArray;
   const compareBotGuessHandler = () => {
+    robotGuessArray = Array.from(robotGuess[0]);
     for (let i = 0; i <= robotGuessArray.length - 1; i++) {
-      if (robotGuessArray[i] === currentPassArray[i]) {
+      if (robotGuess[0] && robotGuessArray[i] === currentPassArray[i]) {
         correctBotGuess[i] = robotGuessArray[i];
       }
     }
@@ -61,17 +60,18 @@ function App() {
 
   const robotGuessHandler = () => {
     setTimeout(() => {
-      passwords = passWords.filter(password => password !== robotGuess);
+      passwords = passWords.filter(password => password !== robotGuess[0]);
       setPassWords([...passwords]);
-      if (mode !== "Easy") correctGuessFilter();
-      if (mode === "Hard") includeLetterGuessFilter();
-      setRobotGuess(passwords[Math.floor(Math.random() * passwords.length)]);
+      robotGuess[0] = passwords[Math.floor(Math.random() * passwords.length)];
+      setRobotGuess([...robotGuess]);
       compareBotGuessHandler();
-      if (robotGuess) allGuesses.push({ guess: robotGuess, current: "bot" });
+      if (mode[0] !== "Noob") correctGuessFilter();
+      if (mode[0] === "Professor") includeLetterGuessFilter();
+      setPassWords([...passwords]);
+      if (robotGuess) allGuesses.push({ guess: robotGuess[0], current: "bot" });
       setAllGuesses([...allGuesses]);
       turn[0] = "Player";
       setTurn([...turn]);
-
     }, 100);
   }
 
@@ -81,18 +81,18 @@ function App() {
         passwords = passwords.filter(password => password[i] === correctBotGuess[i])
       }
     }
-    setPassWords([...passwords]);
+
   }
 
   const includeLetterGuessFilter = () => {
+    robotGuessArray = Array.from(robotGuess[0]);
     correctBotGuess.forEach((letter, index) => {
-      if (!letter && robotGuess) {
+      if (!letter && robotGuess[0]) {
         if (currentPassArray.includes(robotGuessArray[index])) {
           passwords = passwords.filter(password => password.includes(robotGuessArray[index]));
         }
       }
     })
-    setPassWords([...passwords]);
   }
 
   const clickHandler = (event) => {
@@ -110,19 +110,20 @@ function App() {
         turn[0] = "Bot";
         setTurn([...turn]);
         robotGuessHandler();
-        console.log(includePlayerGuess);
-        console.log(currentPass);
       }
     }
   }
 
   const modeHandle = (event) => {
-    if (event.target.innerHTML === "Easy") {
-      setMode("Easy");
-    } else if (event.target.innerHTML === "Normal") {
-      setMode("Normal");
+    if (event.target.innerHTML === "Noob") {
+      mode[0] = "Noob";
+      setMode([...mode]);
+    } else if (event.target.innerHTML === "Clever") {
+      mode[0] = "Clever";
+      setMode([...mode]);
     } else {
-      setMode("Hard");
+      mode[0] = "Professor";
+      setMode([...mode]);
     }
     robotGuessHandler();
   }
@@ -139,7 +140,7 @@ function App() {
         location.reload();
       }
     } else {
-      if (robotGuess && robotGuess.localeCompare(currentPass) == 0) {
+      if (robotGuess[0] && robotGuess[0].localeCompare(currentPass) == 0) {
         alert("you lost :(");
         location.reload();
       }
@@ -148,24 +149,24 @@ function App() {
 
 
   useEffect(() => {
-    robotGuessHandler();
+    // setRobotGuess([passWords[Math.floor(Math.random() * passWords.length)]]);
   }, [])
 
 
 
   return (
     <>
-      {!mode && <StartGame modeHandle={modeHandle} />}
-      {
-        allGuesses.length !== 0 && <GuessList list={allGuesses}
-          correctPlayerGuess={correctPlayerGuess}
-          includePlayerGuess={includePlayerGuess}
-        />}
+      {!mode[0] && <StartGame modeHandle={modeHandle} />}
+      {turn[0] === "Player" ? <div className="player-turn-indicator">Player turn</div> :
+        <div className="bot-turn-indicator">Robot turn</div>}
+      {allGuesses.length !== 0 && <GuessList list={allGuesses}
+        correctPlayerGuess={correctPlayerGuess}
+        includePlayerGuess={includePlayerGuess} />}
       {turn[0] === "Bot" && <div className="loading-container">
         <Loading />
       </div>}
 
-      <PlayerInsertion playerGuess={playerGuess} />
+      <div className='player-insert-container'><PlayerInsertion playerGuess={playerGuess} /></div>
       <div className='keyboard-container'>
         <VirtualKeyboard clickHandler={clickHandler} deleteHandler={deleteHandler} />
       </div>
