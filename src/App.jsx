@@ -72,7 +72,7 @@ function App() {
       setAllGuesses([...allGuesses]);
       turn[0] = "Player";
       setTurn([...turn]);
-    }, 100);
+    }, 1000);
   }
 
   const correctGuessFilter = () => {
