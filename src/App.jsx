@@ -90,6 +90,7 @@ function App() {
       if (!letter && robotGuess[0]) {
         if (currentPassArray.includes(robotGuessArray[index])) {
           passwords = passwords.filter(password => password.includes(robotGuessArray[index]));
+          passwords = passwords.filter(password => password[index] !== robotGuessArray[index]);
         }
       }
     })
