@@ -89,8 +89,7 @@ function App() {
     correctBotGuess.forEach((letter, index) => {
       if (!letter && robotGuess[0]) {
         if (currentPassArray.includes(robotGuessArray[index])) {
-          passwords = passwords.filter(password => password.includes(robotGuessArray[index]));
-          passwords = passwords.filter(password => password[index] !== robotGuessArray[index]);
+          passwords = passwords.filter(password => password.includes(robotGuessArray[index]) && password[index] !== robotGuessArray[index]);
         }
       }
     })
