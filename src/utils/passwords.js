@@ -58,7 +58,7 @@ export const PASSWORDS = [
 ]
 
 
-export function randomCurrentPassword() {
-    let index = Math.floor(Math.random() * (PASSWORDS.length - 1));
+export function randomCurrentPassword() { //PASSWORDS.length - 1
+    let index = Math.floor(Math.random() * (PASSWORDS.length));
     return PASSWORDS[index];
 }
